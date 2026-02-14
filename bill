@@ -1,0 +1,77 @@
+import java.util.*;
+class bill{
+    int consno;
+    String consname;
+    int prev;
+    int curr;
+    String type;
+    double units;
+    double amount=0;
+    bill(int consno,String consname,int prev,int curr,String type){
+        this.consno=consno;
+        this.consname=consname;
+        this.prev=prev;
+        this.curr=curr;
+        this.type=type;
+    }
+    double calculate(){
+        double units=curr-prev;
+        double amount=0;
+        if(type.equals("domestic")){
+            if(units<=100){
+                amount=100*1;
+            }
+            else if(units<=200){
+                amount=100*1+((units-100)*2.50);
+            }
+            else if(units<=500){
+                amount=100*1+100*2.50+((units-200)*4);
+            }
+            else{
+                amount=100*1+100*2.50+300*4+((units-500)*6);
+            }
+        }
+        else if(type.equals("commercial")){
+            if(units<=100){
+                amount=100*2;
+            }
+            else if(units<=200){
+                amount=100*2+((units-100)*4.50);
+            }
+            else if(units<=500){
+                amount=100*2+100*4.50+((units-200)*6);
+            }
+            else{
+                amount=100*2+100*4.50+300*6+((units-500)*7);
+            }
+        }
+        return amount;
+    }
+    void display(){
+        System.out.println("Electricity bill");
+        System.out.println("consumer number:"+consno);
+        System.out.println("consumer name"+consname);
+        System.out.println("Units"+ curr-prev);
+        System.out.println("Amount:"+calculate());
+    }
+}
+public class Main{
+    public static void main(String args[]){
+        Scanner sc =new Scanner(System.in);
+        System.out.println("Enter consno");
+        int consno=sc.nextInt();
+        System.out.println("Enter consname");
+        sc.nextLine();
+        String consname=sc.nextLine();
+        System.out.println("Enter prev");
+        int prev=sc.nextInt();
+        System.out.println("Enter curr");
+        int curr=sc.nextInt();
+        System.out.println("Enter type");
+        sc.nextLine();
+        String type=sc.nextLine();
+        bill e=new bill(consno,consname,prev,curr,type);
+        e.calculate();
+        e.display();
+    }
+}
