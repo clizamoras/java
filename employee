@@ -1,0 +1,125 @@
+import java.util.*;
+class employee{
+    String empid;
+    String empname;
+    String mail;
+    String address;
+    long mobile;
+    double bp;
+    employee(String empid,String empname,String mail,String address,long mobile,double bp){
+        this.empid=empid;
+        this.empname=empname;
+        this.mail=mail;
+        this.address=address;
+        this.mobile=mobile;
+        this.bp=bp;
+    }
+    void printdetails(){
+        System.out.println("empid:"+empid);
+        System.out.println("empname:"+empname);
+        System.out.println("mail:"+mail);
+        System.out.println("address:"+address);
+        System.out.println("mobile:"+mobile);
+        System.out.println("bp:"+bp);
+        }
+}
+class prof extends employee{
+    prof(String empid,String empname,String mail,String address,long mobile,double bp){
+        super(empid,empname,mail,address, mobile, bp);
+    }
+    void calc(){
+        double da=0.97*bp;
+        double hra=0.10*bp;
+        double pf=0.12*bp;
+        double scf=0.001*bp;
+        double gross=da+hra+bp;
+        double net=gross-pf-scf;
+        System.out.println("Prof");
+        printdetails();
+        System.out.println("da:"+da);
+        System.out.println("hra:"+hra);
+        System.out.println("pf:"+pf);
+        System.out.println("scf:"+scf);
+        System.out.println("gross:"+gross);
+        System.out.println("net:"+net);
+    }
+}
+class asprof extends employee{
+    asprof(String empid,String empname,String mail,String address,long mobile,double bp){
+        super(empid,empname,mail,address,mobile, bp);
+    }
+    void calc(){
+        double da=0.70*bp;
+        double hra=0.10*bp;
+        double pf=0.12*bp;
+        double scf=0.001*bp;
+        double gross=da+hra+bp;
+        double net=gross-pf-scf;
+        System.out.println("asProf");
+        printdetails();
+        System.out.println("da:"+da);
+        System.out.println("hra:"+hra);
+        System.out.println("pf:"+pf);
+        System.out.println("scf:"+scf);
+        System.out.println("gross:"+gross);
+        System.out.println("net:"+net);
+    }
+}
+class asssprof extends employee{
+    asssprof(String empid,String empname,String mail,String address,long mobile,double bp){
+        super(empid, empname,mail, address,mobile, bp);
+    }
+    void calc(){
+        double da=0.60*bp;
+        double hra=0.10*bp;
+        double pf=0.12*bp;
+        double scf=0.001*bp;
+        double gross=da+hra+bp;
+        double net=gross-pf-scf;
+        System.out.println("asssProf");
+        printdetails();
+        System.out.println("da:"+da);
+        System.out.println("hra:"+hra);
+        System.out.println("pf:"+pf);
+        System.out.println("scf:"+scf);
+        System.out.println("gross:"+gross);
+        System.out.println("net:"+net);
+    }
+}
+public class Main{
+    public static void main(String args[]){
+        Scanner sc=new Scanner(System.in);
+        System.out.println("empid");
+        String empid=sc.nextLine();
+        System.out.println("empname");
+         String empname=sc.nextLine();
+        System.out.println("mail");
+         String mail=sc.nextLine();
+         System.out.println("address");
+        String address=sc.nextLine();
+        System.out.println("mob");
+        long mobile=sc.nextLong();
+        System.out.println("bp");
+        double bp=sc.nextDouble();
+        System.out.println("1.prof");
+        System.out.println("2.asprof");
+        System.out.println("3.asssprof");
+        System.out.println("ch");
+        int ch=sc.nextInt();
+        if(ch==1){
+            prof p=new prof( empid,empname,mail,address, mobile, bp)
+            p.calc();
+        }
+        else if(ch==2){
+            asprof o=new asprof(empid, empname,mail, address,mobile,bp)
+            o.calc();
+        }
+        else if(ch==3){
+            asssprof ap=new asssprof(empid,empname,mail, address,mobile, bp)
+            ap.calc();
+        }
+        else{
+            System.out.println("invalid");
+        }
+    }
+}
