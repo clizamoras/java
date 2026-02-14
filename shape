@@ -1,0 +1,49 @@
+import java.util.*;
+abstract class shape{
+    int dim1;
+    int dim2;
+    shape(int dim1,int dim2){
+        this.dim1=dim1;
+        this.dim2=dim2;
+    }
+    abstract void printarea();
+}
+class rect extends shape{
+    rect(int length,int breadth){
+        super(length,breadth);
+    }
+    void printarea(){
+        double area=dim1*dim2;
+        System.out.println("area:"+area);
+    }
+}
+class tri extends shape{
+    tri(int height,int base){
+        super(height,base);
+    }
+    void printarea(){
+        double area=(0.5)*dim1*dim2;
+        System.out.println("area:"+area);
+    }
+}
+class circle extends shape{
+    cir(int radius){
+        super(radius,0);
+    }
+    void printarea(){
+        double area=dim1*dim1*3.14;
+        System.out.println("area:"+area);
+    }
+}
+public class Main{
+    public static void main(String args[]){
+        shape s;
+        s=new rect(10,20);
+        s.printarea();
+        s=new tri(10,20);
+        s.printarea();
+        s=new cir(10);
+        s.printarea();
+        
+    }
+}
