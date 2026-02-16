@@ -1,0 +1,46 @@
+public class main{
+    public static void withreturn(){
+        try{
+            System.out.println("try");
+            return;
+        }
+        catch(Exception e){
+            System.out.println("catch");
+        }
+        finally{
+            System.out.println("Finally");
+        }
+        System.out.println("end");
+    }
+    public static void withexception(){
+        try{
+            System.out.println("try");
+            int x=10/0;
+        }
+        catch(Exception e){
+            System.out.println("catch");
+        }
+        finally{
+            System.out.println("Finally");
+        }
+        System.out.println("end");
+    }
+    public static void noexception(){
+        try{
+            System.out.println("try");
+            
+        }
+        catch(Exception e){
+            System.out.println("catch");
+        }
+        finally{
+            System.out.println("Finally");
+        }
+        System.out.println("end");
+    }
+    public static void main(String args[]){
+        withreturn();
+        withexception();
+        noexception();
+    }
+}
