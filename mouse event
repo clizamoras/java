@@ -1,0 +1,36 @@
+import java.util.*;
+import javax.swing.*;
+import java.awt.event.*;
+class MouseEventFrame extends JFrame implements MouseLisitner{
+    JLabel lblmessage;
+    public void MouseEntered(MouseEvent ae){
+    lblmessage.setText("Mouse Entered x="+ae.getX()+"y="+ae.getY());
+}
+public void MousePressed(MouseEvent ae){
+    lblmessage.setText("Mouse Pressed x="+ae.getX()+"y="+ae.getY());
+}
+public void MouseReleased(MouseEvent ae){
+    lblmessage.setText("Mouse Released x="+ae.getX()+"y="+ae.getY());
+}
+public void MouseClicked(MouseEvent ae){
+    lblmessage.setText("Mouse Clicked x="+ae.getX()+"y="+ae.getY());
+}
+public void MouseExited(MouseEvent ae){
+    lblmessage.setText("Mouse Exited x="+ae.getX()+"y="+ae.getY());
+}
+MouseEventFrame(){
+    this.setSize(400,400);
+    this.setLayout(null);
+    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    lblmessage=new JLabel("Mouse Event Demo");
+    lblmeaage.setBounds(150,150,200,25);
+    add(lblmessage);
+    add MouseListner(this);
+    this.setvisible(true);
+}
+}
+public class Main{
+    public static void main(String args[]){
+        new MouseEventFrame();
+    }
+}
