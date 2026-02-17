@@ -1,0 +1,67 @@
+class Q{
+    int n;
+    boolean flag=false;
+    synchronized void put(int n){
+        while(flag){
+            try{
+                wait();
+            }
+            catch(InterruptedException e){
+                System.out.println("Interrupted Exception");
+            }
+        }
+        System.out.println("PUT"+n);
+        this.n=n;
+        flag=true;
+        notify();
+    }
+    synchronized int get(){
+        while(!flag){
+            try{
+                wait();
+            }
+            catch(InterruptedException e){
+                System.out.println("Interrupted Exception");
+            }
+        }
+        System.out.println("GET"+n);
+        notify();
+        flag=false;
+        return n;
+    }
+}
+class producer extends Thread{
+    Q q;
+    producer(Q q){
+        this.q=q;
+        this.start();
+    }
+    public void run(){
+        int n=1;
+        while(true){
+            q.put(n);
+            n++;
+        }
+    }
+}
+class consumer extends Thread{
+    Q q;
+    consumer(Q q){
+        this.q=q;
+        this.start();
+    }
+    public void run(){
+        
+        while(true){
+            q.get();
+            
+        }
+    }
+}
+public class main{
+    public static void main(String args[]){
+        Q q=new Q();
+        producer p=new producer(q);
+        consumer c=new consumer(q);
+    }
+}
