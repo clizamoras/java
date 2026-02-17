@@ -1,0 +1,64 @@
+import java.util.*;
+public class Main{
+    public static void main(String args[]){
+        Scanner sc=new Scanner(System.in);
+        System.out.println("str1");
+        String str1 =sc.nextLine();
+        System.out.println("str2");
+        String str2 =sc.nextLine();
+        int x=str1.compareTo(str2);
+        System.out.println("1.equal 2.ignorecase 3.starts 4,ends  5.compare 6.exit");
+        System.out.println("enter choice");
+        int ch=sc.nextInt();
+        while(1){
+            switch(ch){
+                case 1:
+                    if(str1.equals(str2)){
+                        System.out.println("equal");
+                    }
+                    else{
+                        System.out.println("not");
+                    }
+                    break;
+                case 2:
+                    if(str1.equalsIgnoreCase(str2)){
+                        System.out.println("equal");
+                    }
+                    else{
+                        System.out.println("not");
+                    }
+                    break;
+                case 3:
+                    if(str1.startsWith(str2)){
+                        System.out.println("equal");
+                    }
+                    else{
+                        System.out.println("not");
+                    }
+                    break;
+                case 4:
+                    if(str1.endsWith(str2)){
+                        System.out.println("equal");
+                    }
+                    else{
+                        System.out.println("not");
+                    }
+                    break;
+                case 5:
+                   if(x==0){
+                        System.out.println("equal");
+                    }
+                    else if(x>0){
+                        System.out.println("str1 greater");
+                    }
+                    else{
+                        System.out.println("str1 lesser");
+                    }
+                    break;
+                case 6:
+                    System.exit(0);
+                default:System.out.println("invalid");
+            }
+        }
+    }
+}
