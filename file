@@ -1,0 +1,41 @@
+import java.io.*;
+import java.util.*;
+public class main{
+    public static void main(String args[]){
+        Scanner sc=new Scanner(System.in);
+        String name;
+        System.out.println("File information");
+        System.out.prinln("filename");
+        String name=sc.nextLine();
+        File file =new File(name);
+        if(file.exists()){
+            
+            if(file.canRead()){
+                System.out.println("read");
+            }
+            else{
+                System.out.println("cannot");
+            }
+            if(file.canWrite()){
+                System.out.println("can");
+            }
+            else{
+                System.out.println("cannot");
+            }
+            if(file.isFile()){
+                System.out.println("file");
+            }
+            else if(file.isDirectory()){
+                System.out.println("directory");
+            }
+            else{
+                System.out.println("unknown");
+            }
+            System.out.println("size in bytes"+file.length());
+        }
+        else{
+            System.out.println("does not");
+        }
+        sc.close();
+    }
+}
