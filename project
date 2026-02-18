@@ -1,0 +1,1106 @@
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.Random;
+import java.util.StringTokenizer;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
+public class AllLabPrograms extends JFrame implements ActionListener {
+
+    JMenuBar menuBar;
+    JMenu labMenu;
+    JMenuItem a1, a2, a3, a4, a5, a6, a7, a8, a9a, a9b, a10, exit;
+
+    public AllLabPrograms() {
+        setTitle("Java Lab Programs Menu");
+        setSize(550, 400);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+      
+        try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); }
+        catch (Exception e) {}
+
+        menuBar = new JMenuBar();
+        labMenu = new JMenu("Lab Programs");
+        labMenu.setMnemonic(KeyEvent.VK_L);
+
+        a1 = new JMenuItem("A1 - Electricity Bill");
+        a2 = new JMenuItem("A2 - Employee Payroll (Inheritance)");
+        a3 = new JMenuItem("A3 - Abstract Shape (Polymorphism)");
+        a4 = new JMenuItem("A4 - Finally Block Demonstration");
+        a5 = new JMenuItem("A5 - User Defined Exception (Age)");
+        a6 = new JMenuItem("A6 - Mouse Events Handler");
+        a7 = new JMenuItem("A7 - Multithreading (Even/Odd)");
+        a8 = new JMenuItem("A8 - Producer Consumer Problem");
+        a9a = new JMenuItem("A9a - String Compare Methods");
+        a9b = new JMenuItem("A9b - StringBuffer Methods");
+        a10 = new JMenuItem("A10 - File Properties (I/O)"); 
+        exit = new JMenuItem("Exit");
+
+        JMenuItem[] items = {a1, a2, a3, a4, a5, a6, a7, a8, a9a, a9b, a10, exit};
+        for (JMenuItem item : items) {
+            item.addActionListener(this);
+            labMenu.add(item);
+        }
+
+        menuBar.add(labMenu);
+        setJMenuBar(menuBar);
+
+        JLabel welcomeLabel = new JLabel("<html><h1 style='color: #000000;;'>  Java Lab Programs</h1>" +"<p>Select a Lab Program from the 'Lab Programs' menu above to execute it.</p></html>", JLabel.CENTER);
+        add(welcomeLabel, BorderLayout.CENTER);
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == a1) new A1_Electricity();
+        else if (e.getSource() == a2) new A2_Employee_Payroll();
+        else if (e.getSource() == a3) new A3_Shape_Demo_Radio();
+        else if (e.getSource() == a4) new A4_Finally_Demo();
+        else if (e.getSource() == a5) new UserExceptionJobDemo ();
+        else if (e.getSource() == a6) new A6_Mouse_Events_Demo();
+        else if (e.getSource() == a7) A7_Multithreading_Demo.start();
+        else if (e.getSource() == a8) A8_Producer_Consumer.start();
+        else if (e.getSource() == a9a) new A9a_String_Compare();
+        else if (e.getSource() == a9b) new A9b_StringBuffer_Demo();
+        else if (e.getSource() == a10) new A10_File_Info();
+        else System.exit(0);
+    }
+
+
+
+static class A1_Electricity extends JFrame {
+
+    private static class Consumer {
+        int consumerNo;
+        String name;
+        int prevReading;
+        int currReading;
+        String type;
+    }
+
+    JTextField tNo, tName, tPrev, tCurr;
+    JRadioButton rDom, rCom;
+
+    A1_Electricity() {
+
+        setTitle("A1 Electricity Bill");
+        setSize(600, 300);
+        setLayout(new GridLayout(0, 2, 5, 5));
+
+        tNo = new JTextField();
+        tName = new JTextField();
+        tPrev = new JTextField();
+        tCurr = new JTextField();
+
+        rDom = new JRadioButton("Domestic", true);
+        rCom = new JRadioButton("Commercial");
+
+        ButtonGroup bg = new ButtonGroup();
+        bg.add(rDom);
+        bg.add(rCom);
+
+        JButton btn = new JButton("Generate Bill");
+
+        add(new JLabel("Consumer No")); add(tNo);
+        add(new JLabel("Consumer Name")); add(tName);
+        add(new JLabel("Previous Reading")); add(tPrev);
+        add(new JLabel("Current Reading")); add(tCurr);
+        add(new JLabel("Connection"));
+        add(new JPanel() {{ add(rDom); add(rCom); }});
+        add(btn);
+
+        btn.addActionListener(e -> calculate());
+
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }
+
+    private void calculate() {
+        Consumer c = new Consumer();
+
+        try {
+            c.consumerNo = Integer.parseInt(tNo.getText());
+            c.name = tName.getText();
+            c.prevReading = Integer.parseInt(tPrev.getText());
+            c.currReading = Integer.parseInt(tCurr.getText());
+            c.type = rDom.isSelected() ? "Domestic" : "Commercial";
+
+            if (c.currReading < c.prevReading) {
+                JOptionPane.showMessageDialog(this,
+                        "Current reading cannot be less than previous",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            int units = c.currReading - c.prevReading;
+            double bill = computeBill(units, c.type.toLowerCase());
+
+            // ===== FULL DETAILS BILL =====
+            String result =
+                    "------ ELECTRICITY BILL ------\n" +
+                    "Consumer No     : " + c.consumerNo + "\n" +
+                    "Consumer Name   : " + c.name + "\n" +
+                    "Connection Type : " + c.type + "\n" +
+                    "Previous Reading: " + c.prevReading + "\n" +
+                    "Current Reading : " + c.currReading + "\n" +
+                    "Units Consumed  : " + units + "\n" +
+                    "------------------------------\n" +
+                    "Total Bill Amount: Rs. " + bill;
+
+            JOptionPane.showMessageDialog(this,
+                    result,
+                    "Electricity Bill",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Invalid Input",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private double computeBill(int units, String type) {
+        double bill = 0;
+
+        if (type.equals("domestic")) {
+            if (units <= 100) bill = units * 1;
+            else if (units <= 200) bill = 100 + (units - 100) * 2.5;
+            else if (units <= 500) bill = 100 + 250 + (units - 200) * 4;
+            else bill = 100 + 250 + 1200 + (units - 500) * 6;
+        } else {
+            if (units <= 100) bill = units * 2;
+            else if (units <= 200) bill = 200 + (units - 100) * 4.5;
+            else if (units <= 500) bill = 200 + 450 + (units - 200) * 6;
+            else bill = 200 + 450 + 1800 + (units - 500) * 7;
+        }
+        return bill;
+    }
+}
+
+abstract static class Employee {
+    String empName, empId;
+    double basicPay;
+
+    Employee(String name, String id, double bp) {
+        empName = name;
+        empId = id;
+        basicPay = bp;
+    }
+
+    abstract double calculateDA(double bp);
+
+    public String generatePaySlip() {
+        double da = calculateDA(basicPay);
+        double hra = basicPay * 0.10;
+        double pf = basicPay * 0.12;
+        double staffClubFund = basicPay * 0.001;
+
+        double grossSalary = basicPay + da + hra;
+        double netSalary = grossSalary - (pf + staffClubFund);
+
+        return String.format(
+                "Role: %s\nID: %s\nName: %s\nBasic Pay: %.2f\nDA: %.2f\nHRA: %.2f\nGross Salary: %.2f\nPF: %.2f\nStaff Fund: %.2f\nNet Salary: %.2f",getClass().getSimpleName(), empId, empName,basicPay, da, hra, grossSalary, pf, staffClubFund, netSalary);
+    }
+}
+
+static class Professor extends Employee {
+    Professor(String n, String i, double bp) { super(n, i, bp); }
+    double calculateDA(double bp) { return bp * 0.97; }
+}
+
+static class AssociateProfessor extends Employee {
+    AssociateProfessor(String n, String i, double bp) { super(n, i, bp); }
+    double calculateDA(double bp) { return bp * 0.70; }
+}
+
+static class AssistantProfessor extends Employee {
+    AssistantProfessor(String n, String i, double bp) { super(n, i, bp); }
+    double calculateDA(double bp) { return bp * 0.60; }
+}
+
+static class A2_Employee_Payroll extends JFrame {
+
+    JTextField tName, tId, tBp;
+    JRadioButton rProf, rAssoc, rAsst;
+
+    A2_Employee_Payroll() {
+
+        setTitle("A2 Employee Payroll");
+        setSize(700, 300);
+        setLayout(new GridLayout(0, 2, 5, 5));
+
+        tName = new JTextField();
+        tId = new JTextField();
+        tBp = new JTextField();
+
+        rProf = new JRadioButton("Professor", true);
+        rAssoc = new JRadioButton("Associate Professor");
+        rAsst = new JRadioButton("Assistant Professor");
+
+        ButtonGroup bg = new ButtonGroup();
+        bg.add(rProf); bg.add(rAssoc); bg.add(rAsst);
+
+        JButton btn = new JButton("Generate Pay Slip");
+
+        add(new JLabel("Employee Name")); add(tName);
+        add(new JLabel("Employee ID")); add(tId);
+        add(new JLabel("Basic Pay")); add(tBp);
+        add(new JLabel("Role"));
+        add(new JPanel() {{ add(rProf); add(rAssoc); add(rAsst); }});
+        add(btn);
+
+        btn.addActionListener(e -> calculate());
+
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }
+
+    private void calculate() {
+        try {
+            double bp = Double.parseDouble(tBp.getText());
+            Employee emp;
+
+            if (rProf.isSelected())
+                emp = new Professor(tName.getText(), tId.getText(), bp);
+            else if (rAssoc.isSelected())
+                emp = new AssociateProfessor(tName.getText(), tId.getText(), bp);
+            else
+                emp = new AssistantProfessor(tName.getText(), tId.getText(), bp);
+
+            JOptionPane.showMessageDialog(this,
+                    emp.generatePaySlip(),
+                    "Pay Slip",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,"Invalid Input","Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+}
+
+
+
+// Main class for Shape Demo with radio buttons
+public class A3_Shape_Demo_Radio extends JFrame {
+
+    // Input fields
+    JTextField tL, tW, tB, tH, tR;
+    JTextArea output;
+
+    // Radio buttons for shape selection
+    JRadioButton rectBtn, triBtn, circBtn;
+    ButtonGroup group;
+
+    A3_Shape_Demo_Radio() {
+        setTitle("A3: Shape Area Demo");
+        setSize(400, 400);
+        setLayout(new BorderLayout());
+
+        // Panel for radio buttons
+        JPanel radioPanel = new JPanel(new FlowLayout());
+        rectBtn = new JRadioButton("Rectangle");
+        triBtn = new JRadioButton("Triangle");
+        circBtn = new JRadioButton("Circle");
+
+        group = new ButtonGroup();
+        group.add(rectBtn);
+        group.add(triBtn);
+        group.add(circBtn);
+
+        radioPanel.add(rectBtn);
+        radioPanel.add(triBtn);
+        radioPanel.add(circBtn);
+
+        add(radioPanel, BorderLayout.NORTH);
+
+        // Panel for inputs
+        JPanel input = new JPanel(new GridLayout(5, 2, 5, 5));
+        tL = new JTextField();
+        tW = new JTextField();
+        tB = new JTextField();
+        tH = new JTextField();
+        tR = new JTextField();
+
+        input.add(new JLabel("Rectangle Length"));
+        input.add(tL);
+        input.add(new JLabel("Rectangle Width"));
+        input.add(tW);
+        input.add(new JLabel("Triangle Base"));
+        input.add(tB);
+        input.add(new JLabel("Triangle Height"));
+        input.add(tH);
+        input.add(new JLabel("Circle Radius"));
+        input.add(tR);
+
+        add(input, BorderLayout.CENTER);
+
+        // Button to calculate area
+        JButton btn = new JButton("Calculate Area");
+        add(btn, BorderLayout.SOUTH);
+
+        output = new JTextArea(5, 20);
+        output.setEditable(false);
+        add(new JScrollPane(output), BorderLayout.EAST);
+
+        // Action listener for calculate button
+        btn.addActionListener(e -> calculate());
+
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }
+
+    void calculate() {
+        try {
+            if (rectBtn.isSelected()) {
+                double length = Double.parseDouble(tL.getText());
+                double width = Double.parseDouble(tW.getText());
+                output.setText("Rectangle Area: " + (length * width));
+            } else if (triBtn.isSelected()) {
+                double base = Double.parseDouble(tB.getText());
+                double height = Double.parseDouble(tH.getText());
+                output.setText("Triangle Area: " + (0.5 * base * height));
+            } else if (circBtn.isSelected()) {
+                double radius = Double.parseDouble(tR.getText());
+                output.setText("Circle Area: " + (3.14159 * radius * radius));
+            } else {
+                output.setText("Please select a shape");
+            }
+        } catch (Exception ex) {
+            output.setText("Invalid Input");
+        }
+    }
+
+    public static void main(String[] args) {
+        new A3_Shape_Demo_Radio();
+    }
+}
+
+
+    
+   
+   
+   
+
+public class A4_Finally_Demo extends JFrame {
+
+    JTextArea text;
+    JRadioButton noExceptionBtn, withExceptionBtn, withReturnBtn;
+    ButtonGroup group;
+
+   A4_Finally_Demo() {
+        setTitle("Finally Block Demo");
+        setSize(500, 400);
+        setLayout(new BorderLayout());
+
+        // Radio buttons for the three cases
+        noExceptionBtn = new JRadioButton("No Exception");
+        withExceptionBtn = new JRadioButton("With Exception");
+        withReturnBtn = new JRadioButton("With Return");
+
+        group = new ButtonGroup();
+        group.add(noExceptionBtn);
+        group.add(withExceptionBtn);
+        group.add(withReturnBtn);
+
+        JPanel top = new JPanel();
+        top.add(noExceptionBtn);
+        top.add(withExceptionBtn);
+        top.add(withReturnBtn);
+
+        add(top, BorderLayout.NORTH);
+
+        text = new JTextArea();
+        text.setEditable(false);
+        add(new JScrollPane(text), BorderLayout.CENTER);
+
+        JButton runBtn = new JButton("Run Case");
+        add(runBtn, BorderLayout.SOUTH);
+
+        // Action when "Run Case" button is pressed
+        runBtn.addActionListener(e -> runSelectedCase());
+
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }
+
+    void runSelectedCase() {
+        if (noExceptionBtn.isSelected()) {
+            text.setText(noException());
+        } else if (withExceptionBtn.isSelected()) {
+            text.setText(withException());
+        } else if (withReturnBtn.isSelected()) {
+            text.setText(withReturn());
+        } else {
+            text.setText("Please select a case.");
+        }
+    }
+
+    
+
+    String noException() {
+        StringBuilder output = new StringBuilder();
+        try {
+            output.append("try of no exception\n");
+        } catch (Exception e) {
+            output.append("catch of no exception\n");
+        } finally {
+            output.append("finally of no exception\n");
+        }
+        output.append("end of no exception\n");
+        return output.toString();
+    }
+
+    String withException() {
+        StringBuilder output = new StringBuilder();
+        try {
+            output.append("try of with exception\n");
+            int a = 5 / 0; // This will throw ArithmeticException
+        } catch (Exception e) {
+            output.append("catch of with exception\n");
+        } finally {
+            output.append("finally of with exception\n");
+        }
+        output.append("end of with exception\n");
+        return output.toString();
+    }
+
+    String withReturn() {
+        StringBuilder output = new StringBuilder();
+        try {
+            output.append("try of with return\n");
+            return output.toString(); // Returning from try
+        } catch (Exception e) {
+            output.append("catch of with return\n");
+        } finally {
+            output.append("finally of with return\n"); // finally still executes
+        }
+        output.append("end of with return\n");
+        return output.toString();
+    }
+
+  
+    public static void main(String[] args) {
+        new A4_Finally_Demo();
+    }
+}
+
+  
+
+public class UserExceptionJobDemo extends JFrame {
+
+    JTextField nameField, roleField, ageField;
+    JTextArea result;
+
+    UserExceptionJobDemo() {
+        setTitle("Job Application Eligibility");
+        setSize(700, 500);
+        setLayout(new GridLayout(5, 2, 5, 5));
+
+        // Input fields
+        add(new JLabel("Name:"));
+        nameField = new JTextField();
+        add(nameField);
+
+        add(new JLabel("Role Applied For:"));
+        roleField = new JTextField();
+        add(roleField);
+
+        add(new JLabel("Age:"));
+        ageField = new JTextField();
+        add(ageField);
+
+        JButton checkBtn = new JButton("Check Eligibility");
+        add(checkBtn);
+
+        result = new JTextArea();
+        result.setEditable(false);
+        add(result);
+
+        // Button action
+        checkBtn.addActionListener(e -> checkEligibility());
+
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }
+
+    void checkEligibility() {
+        try {
+            String name = nameField.getText().trim();
+            String role = roleField.getText().trim();
+            int age = Integer.parseInt(ageField.getText().trim());
+
+            if (age < 18) {
+                throw new TooEarlyToApplyException();
+            } else if (age > 45) {
+                throw new TooLateToApplyException();
+            } else {
+                result.setText("Application Successful!\n"
+                        + "Name: " + name + "\n"
+                        + "Role: " + role + "\n"
+                        + "Age: " + age);
+            }
+        } catc
+
+---------- Forwarded message ---------
+From: Dhanyashree M <24b02.dhanyashree@sjec.ac.in>
+Date: Mon, 12 Jan 2026, 14:23
+Subject:
+To: Cliza Ruth Moras <24a54.cliza@sjec.ac.in>
+
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.Random;
+import java.util.StringTokenizer;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
+public class AllLabPrograms extends JFrame implements ActionListener {
+
+    JMenuBar menuBar;
+    JMenu labMenu;
+    JMenuItem a1, a2, a3, a4, a5, a6, a7, a8, a9a, a9b, a10, exit;
+
+    public AllLabPrograms() {
+        setTitle("Java Lab Programs Menu");
+        setSize(550, 400);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+      
+        try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); }
+        catch (Exception e) {}
+
+        menuBar = new JMenuBar();
+        labMenu = new JMenu("Lab Programs");
+        labMenu.setMnemonic(KeyEvent.VK_L);
+
+        a1 = new JMenuItem("A1 - Electricity Bill");
+        a2 = new JMenuItem("A2 - Employee Payroll (Inheritance)");
+        a3 = new JMenuItem("A3 - Abstract Shape (Polymorphism)");
+        a4 = new JMenuItem("A4 - Finally Block Demonstration");
+        a5 = new JMenuItem("A5 - User Defined Exception (Age)");
+        a6 = new JMenuItem("A6 - Mouse Events Handler");
+        a7 = new JMenuItem("A7 - Multithreading (Even/Odd)");
+        a8 = new JMenuItem("A8 - Producer Consumer Problem");
+        a9a = new JMenuItem("A9a - String Compare Methods");
+        a9b = new JMenuItem("A9b - StringBuffer Methods");
+        a10 = new JMenuItem("A10 - File Properties (I/O)"); 
+        exit = new JMenuItem("Exit");
+
+        JMenuItem[] items = {a1, a2, a3, a4, a5, a6, a7, a8, a9a, a9b, a10, exit};
+        for (JMenuItem item : items) {
+            item.addActionListener(this);
+            labMenu.add(item);
+        }
+
+        menuBar.add(labMenu);
+        setJMenuBar(menuBar);
+
+        JLabel welcomeLabel = new JLabel("<html><h1 style='color: #000000;;'>  Java Lab Programs</h1>" +"<p>Select a Lab Program from the 'Lab Programs' menu above to execute it.</p></html>", JLabel.CENTER);
+        add(welcomeLabel, BorderLayout.CENTER);
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == a1) new A1_Electricity();
+        else if (e.getSource() == a2) new A2_Employee_Payroll();
+        else if (e.getSource() == a3) new A3_Shape_Demo_Radio();
+        else if (e.getSource() == a4) new A4_Finally_Demo();
+        else if (e.getSource() == a5) new UserExceptionJobDemo ();
+        else if (e.getSource() == a6) new A6_Mouse_Events_Demo();
+        else if (e.getSource() == a7) A7_Multithreading_Demo.start();
+        else if (e.getSource() == a8) A8_Producer_Consumer.start();
+        else if (e.getSource() == a9a) new A9a_String_Compare();
+        else if (e.getSource() == a9b) new A9b_StringBuffer_Demo();
+        else if (e.getSource() == a10) new A10_File_Info();
+        else System.exit(0);
+    }
+
+
+
+static class A1_Electricity extends JFrame {
+
+    private static class Consumer {
+        int consumerNo;
+        String name;
+        int prevReading;
+        int currReading;
+        String type;
+    }
+
+    JTextField tNo, tName, tPrev, tCurr;
+    JRadioButton rDom, rCom;
+
+    A1_Electricity() {
+
+        setTitle("A1 Electricity Bill");
+        setSize(600, 300);
+        setLayout(new GridLayout(0, 2, 5, 5));
+
+        tNo = new JTextField();
+        tName = new JTextField();
+        tPrev = new JTextField();
+        tCurr = new JTextField();
+
+        rDom = new JRadioButton("Domestic", true);
+        rCom = new JRadioButton("Commercial");
+
+        ButtonGroup bg = new ButtonGroup();
+        bg.add(rDom);
+        bg.add(rCom);
+
+        JButton btn = new JButton("Generate Bill");
+
+        add(new JLabel("Consumer No")); add(tNo);
+        add(new JLabel("Consumer Name")); add(tName);
+        add(new JLabel("Previous Reading")); add(tPrev);
+        add(new JLabel("Current Reading")); add(tCurr);
+        add(new JLabel("Connection"));
+        add(new JPanel() {{ add(rDom); add(rCom); }});
+        add(btn);
+
+        btn.addActionListener(e -> calculate());
+
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }
+
+    private void calculate() {
+        Consumer c = new Consumer();
+
+        try {
+            c.consumerNo = Integer.parseInt(tNo.getText());
+            c.name = tName.getText();
+            c.prevReading = Integer.parseInt(tPrev.getText());
+            c.currReading = Integer.parseInt(tCurr.getText());
+            c.type = rDom.isSelected() ? "Domestic" : "Commercial";
+
+            if (c.currReading < c.prevReading) {
+                JOptionPane.showMessageDialog(this,
+                        "Current reading cannot be less than previous",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            int units = c.currReading - c.prevReading;
+            double bill = computeBill(units, c.type.toLowerCase());
+
+            // ===== FULL DETAILS BILL =====
+            String result =
+                    "------ ELECTRICITY BILL ------\n" +
+                    "Consumer No     : " + c.consumerNo + "\n" +
+                    "Consumer Name   : " + c.name + "\n" +
+                    "Connection Type : " + c.type + "\n" +
+                    "Previous Reading: " + c.prevReading + "\n" +
+                    "Current Reading : " + c.currReading + "\n" +
+                    "Units Consumed  : " + units + "\n" +
+                    "------------------------------\n" +
+                    "Total Bill Amount: Rs. " + bill;
+
+            JOptionPane.showMessageDialog(this,
+                    result,
+                    "Electricity Bill",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Invalid Input",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private double computeBill(int units, String type) {
+        double bill = 0;
+
+        if (type.equals("domestic")) {
+            if (units <= 100) bill = units * 1;
+            else if (units <= 200) bill = 100 + (units - 100) * 2.5;
+            else if (units <= 500) bill = 100 + 250 + (units - 200) * 4;
+            else bill = 100 + 250 + 1200 + (units - 500) * 6;
+        } else {
+            if (units <= 100) bill = units * 2;
+            else if (units <= 200) bill = 200 + (units - 100) * 4.5;
+            else if (units <= 500) bill = 200 + 450 + (units - 200) * 6;
+            else bill = 200 + 450 + 1800 + (units - 500) * 7;
+        }
+        return bill;
+    }
+}
+
+abstract static class Employee {
+    String empName, empId;
+    double basicPay;
+
+    Employee(String name, String id, double bp) {
+        empName = name;
+        empId = id;
+        basicPay = bp;
+    }
+
+    abstract double calculateDA(double bp);
+
+    public String generatePaySlip() {
+        double da = calculateDA(basicPay);
+        double hra = basicPay * 0.10;
+        double pf = basicPay * 0.12;
+        double staffClubFund = basicPay * 0.001;
+
+        double grossSalary = basicPay + da + hra;
+        double netSalary = grossSalary - (pf + staffClubFund);
+
+        return String.format(
+                "Role: %s\nID: %s\nName: %s\nBasic Pay: %.2f\nDA: %.2f\nHRA: %.2f\nGross Salary: %.2f\nPF: %.2f\nStaff Fund: %.2f\nNet Salary: %.2f",getClass().getSimpleName(), empId, empName,basicPay, da, hra, grossSalary, pf, staffClubFund, netSalary);
+    }
+}
+
+static class Professor extends Employee {
+    Professor(String n, String i, double bp) { super(n, i, bp); }
+    double calculateDA(double bp) { return bp * 0.97; }
+}
+
+static class AssociateProfessor extends Employee {
+    AssociateProfessor(String n, String i, double bp) { super(n, i, bp); }
+    double calculateDA(double bp) { return bp * 0.70; }
+}
+
+static class AssistantProfessor extends Employee {
+    AssistantProfessor(String n, String i, double bp) { super(n, i, bp); }
+    double calculateDA(double bp) { return bp * 0.60; }
+}
+
+static class A2_Employee_Payroll extends JFrame {
+
+    JTextField tName, tId, tBp;
+    JRadioButton rProf, rAssoc, rAsst;
+
+    A2_Employee_Payroll() {
+
+        setTitle("A2 Employee Payroll");
+        setSize(700, 300);
+        setLayout(new GridLayout(0, 2, 5, 5));
+
+        tName = new JTextField();
+        tId = new JTextField();
+        tBp = new JTextField();
+
+        rProf = new JRadioButton("Professor", true);
+        rAssoc = new JRadioButton("Associate Professor");
+        rAsst = new JRadioButton("Assistant Professor");
+
+        ButtonGroup bg = new ButtonGroup();
+        bg.add(rProf); bg.add(rAssoc); bg.add(rAsst);
+
+        JButton btn = new JButton("Generate Pay Slip");
+
+        add(new JLabel("Employee Name")); add(tName);
+        add(new JLabel("Employee ID")); add(tId);
+        add(new JLabel("Basic Pay")); add(tBp);
+        add(new JLabel("Role"));
+        add(new JPanel() {{ add(rProf); add(rAssoc); add(rAsst); }});
+        add(btn);
+
+        btn.addActionListener(e -> calculate());
+
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }
+
+    private void calculate() {
+        try {
+            double bp = Double.parseDouble(tBp.getText());
+            Employee emp;
+
+            if (rProf.isSelected())
+                emp = new Professor(tName.getText(), tId.getText(), bp);
+            else if (rAssoc.isSelected())
+                emp = new AssociateProfessor(tName.getText(), tId.getText(), bp);
+            else
+                emp = new AssistantProfessor(tName.getText(), tId.getText(), bp);
+
+            JOptionPane.showMessageDialog(this,
+                    emp.generatePaySlip(),
+                    "Pay Slip",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,"Invalid Input","Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+}
+
+
+
+// Main class for Shape Demo with radio buttons
+public class A3_Shape_Demo_Radio extends JFrame {
+
+    // Input fields
+    JTextField tL, tW, tB, tH, tR;
+    JTextArea output;
+
+    // Radio buttons for shape selection
+    JRadioButton rectBtn, triBtn, circBtn;
+    ButtonGroup group;
+
+    A3_Shape_Demo_Radio() {
+        setTitle("A3: Shape Area Demo");
+        setSize(400, 400);
+        setLayout(new BorderLayout());
+
+        // Panel for radio buttons
+        JPanel radioPanel = new JPanel(new FlowLayout());
+        rectBtn = new JRadioButton("Rectangle");
+        triBtn = new JRadioButton("Triangle");
+        circBtn = new JRadioButton("Circle");
+
+        group = new ButtonGroup();
+        group.add(rectBtn);
+        group.add(triBtn);
+        group.add(circBtn);
+
+        radioPanel.add(rectBtn);
+        radioPanel.add(triBtn);
+        radioPanel.add(circBtn);
+
+        add(radioPanel, BorderLayout.NORTH);
+
+        // Panel for inputs
+        JPanel input = new JPanel(new GridLayout(5, 2, 5, 5));
+        tL = new JTextField();
+        tW = new JTextField();
+        tB = new JTextField();
+        tH = new JTextField();
+        tR = new JTextField();
+
+        input.add(new JLabel("Rectangle Length"));
+        input.add(tL);
+        input.add(new JLabel("Rectangle Width"));
+        input.add(tW);
+        input.add(new JLabel("Triangle Base"));
+        input.add(tB);
+        input.add(new JLabel("Triangle Height"));
+        input.add(tH);
+        input.add(new JLabel("Circle Radius"));
+        input.add(tR);
+
+        add(input, BorderLayout.CENTER);
+
+        // Button to calculate area
+        JButton btn = new JButton("Calculate Area");
+        add(btn, BorderLayout.SOUTH);
+
+        output = new JTextArea(5, 20);
+        output.setEditable(false);
+        add(new JScrollPane(output), BorderLayout.EAST);
+
+        // Action listener for calculate button
+        btn.addActionListener(e -> calculate());
+
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }
+
+    void calculate() {
+        try {
+            if (rectBtn.isSelected()) {
+                double length = Double.parseDouble(tL.getText());
+                double width = Double.parseDouble(tW.getText());
+                output.setText("Rectangle Area: " + (length * width));
+            } else if (triBtn.isSelected()) {
+                double base = Double.parseDouble(tB.getText());
+                double height = Double.parseDouble(tH.getText());
+                output.setText("Triangle Area: " + (0.5 * base * height));
+            } else if (circBtn.isSelected()) {
+                double radius = Double.parseDouble(tR.getText());
+                output.setText("Circle Area: " + (3.14159 * radius * radius));
+            } else {
+                output.setText("Please select a shape");
+            }
+        } catch (Exception ex) {
+            output.setText("Invalid Input");
+        }
+    }
+
+    public static void main(String[] args) {
+        new A3_Shape_Demo_Radio();
+    }
+}
+
+
+    
+   
+   
+   
+
+public class A4_Finally_Demo extends JFrame {
+
+    JTextArea text;
+    JRadioButton noExceptionBtn, withExceptionBtn, withReturnBtn;
+    ButtonGroup group;
+
+   A4_Finally_Demo() {
+        setTitle("Finally Block Demo");
+        setSize(500, 400);
+        setLayout(new BorderLayout());
+
+        // Radio buttons for the three cases
+        noExceptionBtn = new JRadioButton("No Exception");
+        withExceptionBtn = new JRadioButton("With Exception");
+        withReturnBtn = new JRadioButton("With Return");
+
+        group = new ButtonGroup();
+        group.add(noExceptionBtn);
+        group.add(withExceptionBtn);
+        group.add(withReturnBtn);
+
+        JPanel top = new JPanel();
+        top.add(noExceptionBtn);
+        top.add(withExceptionBtn);
+        top.add(withReturnBtn);
+
+        add(top, BorderLayout.NORTH);
+
+        text = new JTextArea();
+        text.setEditable(false);
+        add(new JScrollPane(text), BorderLayout.CENTER);
+
+        JButton runBtn = new JButton("Run Case");
+        add(runBtn, BorderLayout.SOUTH);
+
+        // Action when "Run Case" button is pressed
+        runBtn.addActionListener(e -> runSelectedCase());
+
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }
+
+    void runSelectedCase() {
+        if (noExceptionBtn.isSelected()) {
+            text.setText(noException());
+        } else if (withExceptionBtn.isSelected()) {
+            text.setText(withException());
+        } else if (withReturnBtn.isSelected()) {
+            text.setText(withReturn());
+        } else {
+            text.setText("Please select a case.");
+        }
+    }
+
+    
+
+    String noException() {
+        StringBuilder output = new StringBuilder();
+        try {
+            output.append("try of no exception\n");
+        } catch (Exception e) {
+            output.append("catch of no exception\n");
+        } finally {
+            output.append("finally of no exception\n");
+        }
+        output.append("end of no exception\n");
+        return output.toString();
+    }
+
+    String withException() {
+        StringBuilder output = new StringBuilder();
+        try {
+            output.append("try of with exception\n");
+            int a = 5 / 0; // This will throw ArithmeticException
+        } catch (Exception e) {
+            output.append("catch of with exception\n");
+        } finally {
+            output.append("finally of with exception\n");
+        }
+        output.append("end of with exception\n");
+        return output.toString();
+    }
+
+    String withReturn() {
+        StringBuilder output = new StringBuilder();
+        try {
+            output.append("try of with return\n");
+            return output.toString(); // Returning from try
+        } catch (Exception e) {
+            output.append("catch of with return\n");
+        } finally {
+            output.append("finally of with return\n"); // finally still executes
+        }
+        output.append("end of with return\n");
+        return output.toString();
+    }
+
+  
+    public static void main(String[] args) {
+        new A4_Finally_Demo();
+    }
+}
+
+  
+
+public class UserExceptionJobDemo extends JFrame {
+
+    JTextField nameField, roleField, ageField;
+    JTextArea result;
+
+    UserExceptionJobDemo() {
+        setTitle("Job Application Eligibility");
+        setSize(700, 500);
+        setLayout(new GridLayout(5, 2, 5, 5));
+
+        // Input fields
+        add(new JLabel("Name:"));
+        nameField = new JTextField();
+        add(nameField);
+
+        add(new JLabel("Role Applied For:"));
+        roleField = new JTextField();
+        add(roleField);
+
+        add(new JLabel("Age:"));
+        ageField = new JTextField();
+        add(ageField);
+
+        JButton checkBtn = new JButton("Check Eligibility");
+        add(checkBtn);
+
+        result = new JTextArea();
+        result.setEditable(false);
+        add(result);
+
+        // Button action
+        checkBtn.addActionListener(e -> checkEligibility());
+
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }
+
+    void checkEligibility() {
+        try {
+            String name = nameField.getText().trim();
+            String role = roleField.getText().trim();
+            int age = Integer.parseInt(ageField.getText().trim());
+
+            if (age < 18) {
+                throw new TooEarlyToApplyException();
+            } else if (age > 45) {
+                throw new TooLateToApplyException();
+            } else {
+                result.setText("Application Successful!\n"
+                        + "Name: " + name + "\n"
+                        + "Role: " + role + "\n"
+                        + "Age: " + age);
+            }
+        } catc
+
