@@ -1,0 +1,50 @@
+
+    UserExceptionJobDemo() {
+        setTitle("Job Application Eligibility");
+        setSize(700, 500);
+        setLayout(new GridLayout(5, 2, 5, 5));
+
+        // Input fields
+        add(new JLabel("Name:"));
+        nameField = new JTextField();
+        add(nameField);
+
+        add(new JLabel("Role Applied For:"));
+        roleField = new JTextField();
+        add(roleField);
+
+        add(new JLabel("Age:"));
+        ageField = new JTextField();
+        add(ageField);
+
+        JButton checkBtn = new JButton("Check Eligibility");
+        add(checkBtn);
+
+        result = new JTextArea();
+        result.setEditable(false);
+        add(result);
+
+        // Button action
+        checkBtn.addActionListener(e -> checkEligibility());
+
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }
+
+    void checkEligibility() {
+        try {
+            String name = nameField.getText().trim();
+            String role = roleField.getText().trim();
+            int age = Integer.parseInt(ageField.getText().trim());
+
+            if (age < 18) {
+                throw new TooEarlyToApplyException();
+            } else if (age > 45) {
+                throw new TooLateToApplyException();
+            } else {
+                result.setText("Application Successful!\n"
+                        + "Name: " + name + "\n"
+                        + "Role: " + role + "\n"
+                        + "Age: " + age);
+            }
+        } catc
