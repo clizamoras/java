@@ -1,5 +1,4 @@
-
-    UserExceptionJobDemo() {
+ UserExceptionJobDemo() {
         setTitle("Job Application Eligibility");
         setSize(700, 500);
         setLayout(new GridLayout(5, 2, 5, 5));
