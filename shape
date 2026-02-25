@@ -8,6 +8,7 @@ abstract class shape{
     }
     abstract void printarea();
 }
+
 class rect extends shape{
     rect(int length,int breadth){
         super(length,breadth);
