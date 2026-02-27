@@ -8,6 +8,7 @@ class MouseEventFrame extends JFrame implements MouseLisitner{
 }
 public void MousePressed(MouseEvent ae){
     lblmessage.setText("Mouse Pressed x="+ae.getX()+"y="+ae.getY());
+
 }
 public void MouseReleased(MouseEvent ae){
     lblmessage.setText("Mouse Released x="+ae.getX()+"y="+ae.getY());
