@@ -5,6 +5,7 @@ class employee{
     String mail;
     String address;
     long mobile;
+
     double bp;
     employee(String empid,String empname,String mail,String address,long mobile,double bp){
         this.empid=empid;
