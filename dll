@@ -1,0 +1,38 @@
+class Node {
+    int data;
+    Node prev, next;
+
+    Node(int data) {
+        this.data = data;
+        prev = next = null;
+    }
+}
+
+class DoublyLinkedList {
+    Node head;
+
+    void display() {
+        Node temp = head;
+        while (temp != null) {
+            System.out.print(temp.data + " ");
+            temp = temp.next;
+        }
+    }
+
+    public static void main(String[] args) {
+        DoublyLinkedList list = new DoublyLinkedList();
+
+        Node first = new Node(10);
+        Node second = new Node(20);
+        Node third = new Node(30);
+
+        list.head = first;
+        first.next = second;
+        second.prev = first;
+
+        second.next = third;
+        third.prev = second;
+
+        list.display();
+    }
+}
