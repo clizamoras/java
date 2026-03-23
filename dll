@@ -10,7 +10,6 @@ class Node {
 
 class DoublyLinkedList {
     Node head;
-
     void display() {
         Node temp = head;
         while (temp != null) {
