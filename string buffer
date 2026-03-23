@@ -11,7 +11,7 @@ public class Main{
         System.out.println("enter choice");
         int ch=sc.nextInt();
         while(1){
-            switch(ch){
+          switch(ch){
                 case 1:
                     if(str1.equals(str2)){
                         System.out.println("equal");
