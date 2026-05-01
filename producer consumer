@@ -1,6 +1,7 @@
 class Q{
     int n;
     boolean flag=false;
+
     synchronized void put(int n){
         while(flag){
             try{
