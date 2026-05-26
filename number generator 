@@ -3,9 +3,7 @@ class SquareThread extends Thread{
     int number;
     SquareThread(int number){
         this.number=number;
-        this.start();
-
-    }
+        this.start();}
     public void run(){
         int square=number*number;
         System.out.println("square:"+square);
