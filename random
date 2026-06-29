@@ -1,0 +1,68 @@
+import java.util.*;
+public class Main{
+    private int [] a;
+    void input(){
+        Scanner sc=new Scanner(System.in);
+        Random m= new Random();
+        System.out.println("Enter size");
+        int n=sc.nextInt();
+       
+        a=new int[n];
+        for(int i=0;i<n;i++){
+            a[i]=m.nextInt(1000);
+        }
+    }
+    void display(){
+        for(int x:a){
+            System.out.println(x+"");
+        }
+    }
+    void sort(){
+        quicksort(0,a.length-1);
+    }
+    void quicksort(int left,int right){
+        if(left<right){
+            int s=partition(left,right);
+            quicksort(left,s-1);
+            quicksort(s+1,right);
+        }
+    }
+    int partition(int left,int right){
+        int i,j;
+        int pivot=a[left];
+        i=left;
+        j=right;
+        while(i<j){
+            while(a[i]<=pivot && i<=right){
+                i++;
+            }
+            while(a[j]>pivot && j>left){
+                j--;
+            }
+        
+        if(i<j){
+                swap(i,j);
+            }
+        }
+        swap(left,j);
+        return j;
+    }
+    void swap(int i,int j){
+        int temp=a[i];
+        a[i]=a[j];
+        a[j]=temp;
+    }
+    public static void main(String args[]){
+        Main sorter= new Main();
+        sorter.input();
+        System.out.println("Array before sorting");
+        sorter.display();
+        long StartTime=System.nanoTime();
+        sorter.sort();
+        long EndTime=System.nanoTime();
+        System.out.println("Array after sorting");
+        sorter.display();
+        double duration =(EndTime-StartTime)/(1000000);
+        System.out.println("Time taken for sorting "+duration+"milliseconds");
+    }
+}
