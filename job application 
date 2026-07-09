@@ -1,5 +1,5 @@
 
-import java.util.*;
+import java.util.*; 
 class tooearlytoapply extends Exception{
     tooearlytoapply(){
         super("too early to apply");
